@@ -1,0 +1,45 @@
+on:
+  schedule:
+    - cron: 30 03 * * *
+  push:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ vars.hostname }}
+      url: https://${{ env.hostname }}.${{ env.domain }}
+    steps:
+      - uses: actions/checkout@HEAD
+      - name: Create new VM and start EaaS installation using https://eaas.dev/eaas-installer/blob/@/scripts/manage-test-servers-openstack.py
+        run: |
+          printf '%s\n' "$ssh_key" | install -D -m 0600 /dev/stdin ~/.ssh/id_ed25519
+          ssh-keygen -y -f ~/.ssh/id_ed25519 >> ssh_keys
+          sudo apt-get update && sudo apt-get install -y python3-openstacksdk
+          git clone https://eaas.dev/eaas-installer
+          cd eaas-installer
+          git clone "$dns_token_git_url"
+          printf %s "$clouds_yaml" > clouds.yaml
+          scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" create -f d2-4 -s ../ssh_keys --hostname "$hostname" \
+            https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1
+          scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" cleanup -k 1
+      - name: EaaS installation log
+        run: |
+          sleep 30
+          while :; do
+            if
+              (
+                ssh -To StrictHostKeyChecking=accept-new "ubuntu@$hostname.$domain" -- journalctl -u cloud-final -f </dev/null | tee /dev/stderr &
+              ) | grep -qF '</details>'
+            then
+              break
+            fi
+          done
+        timeout-minutes: 40
+    env:
+      ssh_key: ${{ secrets.ssh_key }}
+      dns_token_git_url: ${{ secrets.dns_token_git_url }}
+      clouds_yaml: ${{ secrets.clouds_yaml }}
+      domain: ${{ vars.domain }}
+      hostname: ${{ vars.hostname }}
