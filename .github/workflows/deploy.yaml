@@ -14,8 +14,8 @@ jobs:
       - uses: actions/checkout@HEAD
       - name: Create new VM and start EaaS installation using https://eaas.dev/eaas-installer/blob/@/scripts/manage-test-servers-openstack.py
         run: |
-          printf '%s\n' "$ssh_key" | install -D -m 0600 /dev/stdin ~/.ssh/id_ed25519
-          ssh-keygen -y -f ~/.ssh/id_ed25519 >> ssh_keys
+          (test "$ssh_key" && printf '%s\n' "$ssh_key" || echo y | ssh-keygen -q -t ed25519 -C "" -N "" -f /dev/stdout) | install -D -m 0600 /dev/stdin ~/.ssh/id_ed25519
+          ssh-keygen -y -f ~/.ssh/id_ed25519 | tee /dev/stderr >> ssh_keys
           sudo apt-get update && sudo apt-get install -y python3-openstacksdk
           git clone https://eaas.dev/eaas-installer
           cd eaas-installer
