@@ -30,7 +30,7 @@ jobs:
           while :; do
             if
               (
-                ssh -To StrictHostKeyChecking=accept-new "ubuntu@$hostname.$domain" -- journalctl -u cloud-final -f </dev/null | tee /dev/stderr &
+                ssh -T -o ServerAliveInterval=30 -o StrictHostKeyChecking=accept-new "ubuntu@$hostname.$domain" -- sudo nice -n -10 -- journalctl -u cloud-final -f </dev/null | tee /dev/stderr &
               ) | grep -qF '</details>'
             then
               break
