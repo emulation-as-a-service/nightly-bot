@@ -30,13 +30,13 @@ jobs:
           while :; do
             if
               (
-                ssh -T -o ServerAliveInterval=30 -o StrictHostKeyChecking=accept-new "ubuntu@$hostname.$domain" -- sudo nice -n -10 -- journalctl -u cloud-final -f </dev/null | tee /dev/stderr &
+                ssh -T -o ServerAliveInterval=30 -o StrictHostKeyChecking=accept-new "ubuntu@$hostname.$domain" -- journalctl -u cloud-final -f </dev/null | tee /dev/stderr &
               ) | grep -qF '</details>'
             then
               break
             fi
           done
-        timeout-minutes: 60
+        timeout-minutes: 45
     env:
       ssh_key: ${{ secrets.ssh_key }}
       dns_token_git_url: ${{ secrets.dns_token_git_url }}
