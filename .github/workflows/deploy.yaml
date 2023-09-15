@@ -36,7 +36,7 @@ jobs:
               break
             fi
           done
-        timeout-minutes: 40
+        timeout-minutes: 45
     env:
       ssh_key: ${{ secrets.ssh_key }}
       dns_token_git_url: ${{ secrets.dns_token_git_url }}
