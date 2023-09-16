@@ -4,8 +4,6 @@ on:
   push:
   workflow_dispatch:
 
-name: ${{ vars.hostname }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
