@@ -1,3 +1,5 @@
+name: Deploy to fresh VM
+
 on:
   schedule:
     - cron: 30 03 * * *
