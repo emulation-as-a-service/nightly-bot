@@ -32,7 +32,7 @@ jobs:
           while :; do
             if
               (
-                ssh -T -o ServerAliveInterval=30 -o StrictHostKeyChecking=accept-new "ubuntu@$hostname.$domain" -- journalctl -u cloud-final -f </dev/null | tee /dev/stderr &
+                ssh -T -o ServerAliveInterval=30 -o StrictHostKeyChecking=accept-new "ubuntu@$hostname.$domain" -- tail -F /eaas-home/log/server/server.log "&" journalctl -fu cloud-final eaas </dev/null | tee /dev/stderr &
               ) | grep -qF '</details>'
             then
               break
