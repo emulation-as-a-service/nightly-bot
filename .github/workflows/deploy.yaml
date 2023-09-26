@@ -5,12 +5,17 @@ on:
     - cron: 30 03 * * *
   push:
   workflow_dispatch:
+    inputs:
+      hostname:
+        type: string
+      domain:
+        type: string
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ vars.hostname }}
+      name: ${{ inputs.hostname || vars.hostname }}
       url: https://${{ env.hostname }}.${{ env.domain }}
     steps:
       - uses: actions/checkout@HEAD
@@ -43,5 +48,5 @@ jobs:
       ssh_key: ${{ secrets.ssh_key }}
       dns_token_git_url: ${{ secrets.dns_token_git_url }}
       clouds_yaml: ${{ secrets.clouds_yaml }}
-      domain: ${{ vars.domain }}
-      hostname: ${{ vars.hostname }}
+      domain: ${{ inputs.domain || vars.domain }}
+      hostname: ${{ inputs.hostname || vars.hostname }}
