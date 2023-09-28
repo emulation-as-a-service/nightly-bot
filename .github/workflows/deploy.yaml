@@ -10,6 +10,9 @@ on:
         type: string
       domain:
         type: string
+      env:
+        description: "Environment for https://github.com/emulation-as-a-service/eaas-installer/blob/@/scripts/install-test-server.py#L38"
+        type: string
 
 jobs:
   deploy:
@@ -28,8 +31,11 @@ jobs:
           cd eaas-installer
           git clone "$dns_token_git_url"
           printf %s "$clouds_yaml" > clouds.yaml
-          scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" create -f d2-4 -s ../ssh_keys --hostname "$hostname" \
-            https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1
+          : "${env:=https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1}"
+          set -f
+          set -- $env             
+          set +f
+          scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" create -f d2-4 -s ../ssh_keys --hostname "$hostname" "$@"
           scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" cleanup -k 1
       - name: EaaS installation log
         run: |
@@ -50,3 +56,4 @@ jobs:
       clouds_yaml: ${{ secrets.clouds_yaml }}
       domain: ${{ inputs.domain || vars.domain }}
       hostname: ${{ inputs.hostname || vars.hostname }}
+      env: ${{ inputs.env }}
