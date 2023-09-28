@@ -22,6 +22,10 @@ jobs:
       - uses: actions/checkout@HEAD
       - name: Clean up VM(s)
         run: |
+          git clone https://eaas.dev/eaas-installer
+          cd eaas-installer
+          git clone "$dns_token_git_url"
+          printf %s "$clouds_yaml" > clouds.yaml
           scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" cleanup -k 0
           curl --oauth2-bearer "$GITHUB_TOKEN" -X DELETE "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/environments/$hostname"
     timeout-minutes: 10
