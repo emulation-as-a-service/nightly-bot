@@ -22,6 +22,7 @@ jobs:
       - uses: actions/checkout@HEAD
       - name: Clean up VM(s)
         run: |
+          sudo apt-get update && sudo apt-get install -y python3-openstacksdk
           git clone https://eaas.dev/eaas-installer
           cd eaas-installer
           git clone "$dns_token_git_url"
