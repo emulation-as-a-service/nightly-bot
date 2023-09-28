@@ -8,6 +8,7 @@ on:
     inputs:
       hostname:
         type: string
+        default: nightly
       domain:
         type: string
       env:
@@ -32,6 +33,7 @@ jobs:
           cd eaas-installer
           git clone "$dns_token_git_url"
           printf %s "$clouds_yaml" > clouds.yaml
+          : "${env:=https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1}"
           set -f
           set -- $env             
           set +f
