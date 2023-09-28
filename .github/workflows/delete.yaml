@@ -1,4 +1,4 @@
-name: Delete environments/VMs
+name: Delete VMs
 
 on:
   workflow_dispatch:
@@ -28,7 +28,11 @@ jobs:
           git clone "$dns_token_git_url"
           printf %s "$clouds_yaml" > clouds.yaml
           scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" cleanup -k 0
-          curl --oauth2-bearer "$GITHUB_TOKEN" -X DELETE "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/environments/$hostname"
+          # TODO: delete deployment environment
+          # The following does not work as GITHUB_TOKEN cannot get
+          # "administration" permission (<https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs#overview>,
+          # <https://docs.github.com/en/rest/overview/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-administration>).
+          # curl --oauth2-bearer "$GITHUB_TOKEN" -X DELETE "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/environments/$hostname"
     timeout-minutes: 10
     env:
       dns_token_git_url: ${{ secrets.dns_token_git_url }}
