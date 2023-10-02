@@ -69,3 +69,5 @@ jobs:
       domain: ${{ inputs.domain || vars.domain }}
       hostname: ${{ inputs.hostname || vars.hostname }}
       env: ${{ inputs.env }}
+      eaas_version: ${{ inputs.eaas_version }}
+      demo_ui_version: ${{ inputs.demo_ui_version }}
