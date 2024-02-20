@@ -13,7 +13,7 @@ on:
         type: string
       env:
         description:
-          Environment for https://eaas.dev/eaas-installer/blob/@/scripts/install-test-server.py#L48
+          Environment for https://eaas.dev/eaas-installer/blob/@/scripts/install-test-server.py#L57
           (in addition to individual inputs below)
         type: string
         default: https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1
