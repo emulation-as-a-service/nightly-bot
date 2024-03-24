@@ -11,6 +11,11 @@ on:
         default: nightly
       domain:
         type: string
+      flavor:
+        description:
+          Flavor to use for VM (see <https://www.ovhcloud.com/en-ie/public-cloud/prices/>)
+        type: string
+        default: d2-4
       env:
         description:
           Environment for https://eaas.dev/eaas-installer/blob/@/scripts/install-test-server.py#L57
@@ -39,6 +44,7 @@ jobs:
           cd eaas-installer
           git clone "$dns_token_git_url"
           printf %s "$clouds_yaml" > clouds.yaml
+          : "${flavor:=d2-4}"
           : "${env:=eaasi_ui_version=latest https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1}"
           set -f
           set -- $env             
@@ -49,7 +55,7 @@ jobs:
           if test "${demo_ui_version-}"; then
             set -- "$@" "demo_ui_version=$demo_ui_version"
           fi
-          scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" create -f d2-4 -s ../ssh_keys --hostname "$hostname" "$@"
+          scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" create -f "$flavor" -s ../ssh_keys --hostname "$hostname" "$@"
           scripts/manage-test-servers-openstack.py -p "eaas-test-$hostname" -d "$domain" cleanup -k 1
       - name: EaaS installation log
         run: |
