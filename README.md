@@ -18,3 +18,4 @@ https://eaas.dev/eaas-proxy |  [![pipeline status](https://gitlab.com/emulation-
 - https://nightly.test.emulation.cloud/emil/admin/build-info: `master` branch of eaas-server ([changelog](https://gitlab.com/emulation-as-a-service/eaas-server/commits/master))
 - gets redeployed every night at 03:30 UTC (existing data is **deleted**)
   - installed by `master` branch of eaas-installer ([changelog](https://gitlab.com/emulation-as-a-service/eaas-installer/commits/master))
+- runs on `d2-8` (8 GiB of RAM) instance at [OVHcloud](https://www.ovhcloud.com/en-ie/public-cloud/prices/)
