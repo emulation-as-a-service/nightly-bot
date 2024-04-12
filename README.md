@@ -11,7 +11,7 @@ https://eaas.dev/eaas-proxy |  [![pipeline status](https://gitlab.com/emulation-
 
 ## nightly.test.emulation.cloud
 
-- https://nightly.test.emulation.cloud: `testing` branch of eaasi-client ([changelog](https://gitlab.com/eaasi/eaasi-client-pub/commits/testing))
+- https://nightly.test.emulation.cloud: `staging` branch of eaasi-client ([changelog](https://gitlab.com/eaasi/eaasi-client-pub/commits/staging))
   - username: `admin`, password: `admin`
   - one group with username: `groupadmin`, password: `groupadmin`  
 - https://nightly.test.emulation.cloud/admin: `master` branch of demo-ui ([changelog](https://gitlab.com/emulation-as-a-service/demo-ui/commits/master))

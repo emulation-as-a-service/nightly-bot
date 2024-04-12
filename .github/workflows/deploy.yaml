@@ -21,7 +21,7 @@ on:
           Environment for https://eaas.dev/eaas-installer/blob/@/scripts/install-test-server.py#L57
           (in addition to individual inputs below)
         type: string
-        default: eaasi_ui_version=testing https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1
+        default: eaasi_ui_version=latest https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1
       eaas_version:
         type: string
       demo_ui_version:
@@ -45,7 +45,7 @@ jobs:
           git clone "$dns_token_git_url"
           printf %s "$clouds_yaml" > clouds.yaml
           : "${flavor:=d2-8}"
-          : "${env:=eaasi_ui_version=testing https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1}"
+          : "${env:=eaasi_ui_version=latest https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1}"
           set -f
           set -- $env             
           set +f
