@@ -12,8 +12,8 @@ https://eaas.dev/eaas-proxy |  [![pipeline status](https://gitlab.com/emulation-
 ## nightly.test.emulation.cloud
 
 - https://nightly.test.emulation.cloud: `staging` branch of eaasi-client ([changelog](https://gitlab.com/eaasi/eaasi-client-pub/commits/staging))
-  - username: `admin`, password: `admin`
-  - one group with username: `groupadmin`, password: `groupadmin`  
+  - one group with username: `admin`, password: `admin`  
+  - (Keycloak administrator: username: `superadmin`, password: `superadmin`)
 - https://nightly.test.emulation.cloud/admin: `master` branch of demo-ui ([changelog](https://gitlab.com/emulation-as-a-service/demo-ui/commits/master))
 - https://nightly.test.emulation.cloud/emil/admin/build-info: `master` branch of eaas-server ([changelog](https://gitlab.com/emulation-as-a-service/eaas-server/commits/master))
 - gets redeployed every night at 03:30 UTC (existing data is **deleted**)
