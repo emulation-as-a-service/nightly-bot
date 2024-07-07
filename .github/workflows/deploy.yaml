@@ -37,7 +37,8 @@ jobs:
       - uses: actions/checkout@HEAD
       - name: Create new VM and start EaaS installation using https://eaas.dev/eaas-installer/blob/@/scripts/manage-test-servers-openstack.py
         run: |
-          (test "$ssh_key" && printf '%s\n' "$ssh_key" || echo y | ssh-keygen -q -t ed25519 -C "" -N "" -f /dev/stderr 2>&1 >/dev/null | sed -n /---BEGIN/,/---END/p) | install -D -m 0600 /dev/stdin ~/.ssh/id_ed25519
+          (test "${ssh_key-}" && printf '%s\n' "$ssh_key" || echo y | ssh-keygen -q -t ed25519 -C "" -N "" -f /dev/stderr 2>&1 >/dev/null | sed -n /---BEGIN/,/---END/p) \
+            | install -D -m 0600 /dev/stdin ~/.ssh/id_ed25519
           ssh-keygen -y -f ~/.ssh/id_ed25519 | tee /dev/stderr >> ssh_keys
           sudo apt-get update && sudo apt-get install -y python3-openstacksdk
           git clone https://eaas.dev/eaas-installer
@@ -63,7 +64,9 @@ jobs:
           while :; do
             if
               (
-                ssh -T -o ServerAliveInterval=30 -o StrictHostKeyChecking=accept-new "ubuntu@$hostname.$domain" -- tail -F /eaas-home/log/server/server.log "&" journalctl -f -u cloud-final -u eaas </dev/null | tee /dev/stderr &
+                ssh -T -o ServerAliveInterval=30 -o StrictHostKeyChecking=accept-new "ubuntu@$hostname.$domain" </dev/null -- \
+                  tail -F /eaas-home/log/server/server.log "&" journalctl -f -u cloud-final -u eaas \
+                | tee /dev/stderr &
               ) | grep -qF '</details>'
             then
               break
