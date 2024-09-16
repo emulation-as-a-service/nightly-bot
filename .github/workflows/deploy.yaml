@@ -3,7 +3,10 @@ name: Deploy to fresh VM
 on:
   schedule:
     - cron: 30 03 * * *
+    - cron: 31 03 * * *
   push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       hostname:
@@ -35,6 +38,12 @@ jobs:
       url: https://${{ env.hostname }}.${{ env.domain }}
     steps:
       - uses: actions/checkout@HEAD
+      - if: github.event.schedule == '31 03 * * *'
+        run: |
+          cat <<"EOF" >>"$GITHUB_ENV"
+          domain=rc
+          env=eaasi_ui_version=testing https=1 acmesh=zerossl setup_keycloak=1 import_test_environments=1 show_summary=1
+          EOF
       - name: Create new VM and start EaaS installation using https://eaas.dev/eaas-installer/blob/@/scripts/manage-test-servers-openstack.py
         run: |
           (test "${ssh_key-}" && printf '%s\n' "$ssh_key" || echo y | ssh-keygen -q -t ed25519 -C "" -N "" -f /dev/stderr 2>&1 >/dev/null | sed -n /---BEGIN/,/---END/p) \
